@@ -4,7 +4,7 @@
  * http://medoo.in
  * Version 1.0.2
  *
- * Copyright 2016, Angel Lai
+ * Copyright 2016, Angel Lai tongyihong
  * Released under the MIT license
  */
 class medoo
