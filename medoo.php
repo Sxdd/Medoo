@@ -194,13 +194,16 @@ class Medoo
         foreach ($columns as $key => $value) {
             preg_match('/([a-zA-Z0-9_\-\.]*)\s*\(([a-zA-Z0-9_\-]*)\)/i', $value, $match);
 
+            $reName = null;
             if (isset($match[ 1 ], $match[ 2 ])) {
-                $column = $this->columnQuote($match[ 1 ]).' AS '.$this->columnQuote($match[ 2 ]);
-            } else {
-                $column = $this->columnQuote($value);
+                $reName = ' AS '.$this->columnQuote($match[ 2 ]);
+                $val = $match[ 1 ];
             }
+
+            $column = $this->columnQuote($val);
+
             if (!is_int($key)) {
-                $column = $key.'('.$column.')';
+                $column = $key.'('.$column.')'.$reName;
             }
             array_push($stack, $column);
         }
@@ -232,11 +235,7 @@ class Medoo
 
     protected function fnQuote($column, $string)
     {
-        return (strpos($column, '#') === 0 && preg_match('/^[A-Z0-9\_]*\([^)]*\)$/', $string)) ?
-
-            $string :
-
-            $this->quote($string);
+        return (strpos($column, '#') === 0 && preg_match('/^[A-Z0-9\_]*\([^)]*\)$/', $string)) ? $string : $this->quote($string);
     }
 
     protected function dataImplode($data, $conjunctor, $outer_conjunctor = null)

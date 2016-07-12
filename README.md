@@ -67,10 +67,12 @@ $database->insert('account', [
     'lang' => ['en', 'fr', 'jp', 'cn']
 ]);
 
+//New function support
 $database->select("table", [
     "user_id",
     "FROM_UNIXTIME" => "time(new_time)"
 ]);
+// select `user_id`,FROM_UNIXTIME(`time`) AS `new_time`;
 
 ```
 
