@@ -1,6 +1,8 @@
 <?php
 
-namespace Medoo;
+namespace medoo;
+
+use PDO;
 
 /*!
  * Medoo database framework
