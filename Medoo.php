@@ -199,15 +199,16 @@ class Medoo
             $reName = null;
             if (isset($match[ 1 ], $match[ 2 ])) {
                 $reName = ' AS '.$this->columnQuote($match[ 2 ]);
-                $val = $match[ 1 ];
+                $column = $this->columnQuote($match[ 1 ]);
+                if (!is_int($key)) {
+                    $column = $key.'('.$column.')';
+                }
+                $column = $column.$reName;
+            } else {
+                $column = $this->columnQuote($value);
             }
 
-            $column = $this->columnQuote($val);
-
-            if (!is_int($key)) {
-                $column = $key.'('.$column.')'.$reName;
-            }
-            array_push($stack, $column);
+            $stack[] = $column;
         }
 
         return implode($stack, ',');
@@ -732,7 +733,7 @@ class Medoo
     {
         $query = $this->query($this->selectContext($table, $join, $column, $where, 'COUNT'));
 
-        return $query ? 0 + $query->fetchColumn() : false;
+        return $query ? (int) $query->fetchColumn() : false;
     }
 
     public function max($table, $join, $column = null, $where = null)
@@ -742,7 +743,7 @@ class Medoo
         if ($query) {
             $max = $query->fetchColumn();
 
-            return is_numeric($max) ? $max + 0 : $max;
+            return is_numeric($max) ? (int) $max : $max;
         } else {
             return false;
         }
@@ -755,7 +756,7 @@ class Medoo
         if ($query) {
             $min = $query->fetchColumn();
 
-            return is_numeric($min) ? $min + 0 : $min;
+            return is_numeric($min) ? (int) $min : $min;
         } else {
             return false;
         }
@@ -765,14 +766,14 @@ class Medoo
     {
         $query = $this->query($this->selectContext($table, $join, $column, $where, 'AVG'));
 
-        return $query ? 0 + $query->fetchColumn() : false;
+        return $query ? (int) $query->fetchColumn() : false;
     }
 
     public function sum($table, $join, $column = null, $where = null)
     {
         $query = $this->query($this->selectContext($table, $join, $column, $where, 'SUM'));
 
-        return $query ? 0 + $query->fetchColumn() : false;
+        return $query ? (int) $query->fetchColumn() : false;
     }
 
     public function action($actions, $param = null)
